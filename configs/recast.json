@@ -1,0 +1,44 @@
+{
+  "model": {
+    "in_steps": 12,
+    "out_steps": 12,
+    "steps_per_day": 288,
+    "input_embedding_dim": 24,
+    "tod_embedding_dim": 24,
+    "dow_embedding_dim": 24,
+    "node_embedding_dim": 80,
+    "mask_embedding_dim": 8,
+    "feed_forward_dim": 256,
+    "num_heads": 4,
+    "num_layers": 3,
+    "dropout": 0.1,
+    "adp_emb_dim": 16
+  },
+  "objective": {
+    "recon_weight": 0.5,
+    "units": "source units after inverse standardization"
+  },
+  "augmentation": {
+    "corrupted_copies_of_training_timeline": 16,
+    "copy_used_in_epoch_e": "e mod 16",
+    "copy_type": "point or block, each with probability 0.5",
+    "rates": [0.1, 0.2, 0.4],
+    "block_duration_steps": [2, 6],
+    "probability_window_is_shown_corrupted": 0.5
+  },
+  "optimization": {
+    "optimizer": "Adam",
+    "lr": 0.001,
+    "eps": 1e-8,
+    "batch_size": 16,
+    "scheduler": "MultiStepLR",
+    "gamma": 0.1,
+    "gradient_clipping": null,
+    "precision": "fp16 autocast for training, fp32 losses, fp32 validation",
+    "per_dataset": {
+      "METR-LA":  {"weight_decay": 3e-4,   "milestones": [20, 30],     "max_epochs": 200, "patience": 30},
+      "PEMS-BAY": {"weight_decay": 1e-4,   "milestones": [10, 30],     "max_epochs": 300, "patience": 20},
+      "PEMSD8":   {"weight_decay": 1.5e-3, "milestones": [25, 45, 65], "max_epochs": 300, "patience": 30}
+    }
+  }
+}
